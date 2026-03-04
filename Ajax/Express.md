@@ -1,0 +1,2 @@
+XHR是对Ajax的请求做筛选，Express是对服务器做筛选
+看到XHR，要想到Ajax

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX GET 请求</title>
+    <style>
+        #a {
+            width: 100px;
+            height: 50px;
+            border: black 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <button>发送请求</button>
+    <div id="a"></div>
+    
+</body>
+<script>
+        const btn = document.querySelector('button');
+        //响应的结果在div里得到呈现
+        const a = document.querySelector('#a');/*注意：不能单写a,找页面里的 <a> 链接标签，但你要显示数据的是 id="a" 的 <div> 元素。
+正确写法必须加 #（代表按 ID 查找）*/
+
+        btn.addEventListener('click', function () {
+            console.log('发送请求');
+            //1.创建对象
+            const xhr = new XMLHttpRequest();
+            //2.初始化 设置请求方法和URL,GET是向（/server）发送请求
+            xhr.open('GET','http://127.0.0.1:8000/server');
+            //3.发送
+            xhr.send();
+            //4.事件绑定 处理服务器返回的结果
+            /*on when 当...时候
+            readystate 是xhr对象身上的属性，表示状态 0-4
+            0：xhr对象创建完成,未初始化
+            1：open方法调用完成
+            2：send方法调用完成
+            3：服务端返回部分结果
+            4：服务端返回所有结果，可以使用
+            change 事件监听 readystate 的变化
+            */
+           xhr.onreadystatechange = function () {
+               //判断服务器返回所有结果
+               if (xhr.readyState === 4) {
+                   //判断响应状态码 200-299
+                   if (xhr.status >= 200 && xhr.status < 300) {
+                       //处理结果 行 头 空行 体
+                       //响应行,2.. 成功 3.. 重定向 4.. 请求错误 5.. 服务器错误
+                    //    console.log(xhr.status); //状态码
+                    //    console.log(xhr.statusText); //状态字符串
+                    //    console.log(xhr.getAllResponseHeaders()); //所有响应头
+                    //    console.log(xhr.response); //响应体
+
+                       //设置a文本
+                       a.innerHTML = xhr.response;
+                       //响应体响应结果
+                       //1.响应体 responseText 响应体内容是文本（默认值）
+                       //2.响应体 responseXML 响应体内容是XML格式，如果响应的内容不是XML格式的就会报错
+                       //3.响应体 response 响应体内容可能是json，自动转换成对象
+                       //a.innerHTML = xhr.responseText;
+                       //a.innerHTML = xhr.responseXML;
+                       //a.innerHTML = xhr.response;
+                //        const div = document.querySelector('div');
+                //        div.innerHTML = xhr.response;
+                   } else {
+                       console.log('请求失败');
+
+
+
+
+        //                const div = document.querySelector('div');
+        //                div.innerHTML = xhr.response;
+        //            } else {
+        //                console.log('请求失败');
+           }
+        }}
+        })
+    </script>
+</html>
