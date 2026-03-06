@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IE缓存问题</title>
+    <style>
+        #result {
+            width: 200px;
+            height: 100px;
+            border: 1px solid #3877c0;
+        }
+    </style>
+</head>
+<body>
+    <button>点击发送</button>
+    <div id="result"></div>
+    <script>
+        const btn =document.querySelector('button');
+        const result =document.querySelector('#result');
+        btn.addEventListener('click',function(){
+            console.log('发送请求');
+            const xhr = new XMLHttpRequest();
+            //重点：加时间戳，防止IE缓存
+            xhr.open('GET','http://127.0.0.1:8000/ie?t='+Date.now());
+            xhr.send();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        result.innerHTML = xhr.response;
+            }
+        }
+    }
+})
+
+    </script>
+</body>
+</html>

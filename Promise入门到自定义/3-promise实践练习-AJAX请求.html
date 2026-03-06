@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>promise封装AJAX</title>
+</head>
+<body>
+    <div class="contaner">
+        <h2>Promise封装AJAX操作</h2>
+        <button id="btn">点击发送AJAX</button>
+    </div>
+    <script>
+        // 获取元素对象
+        const btn = document.querySelector('#btn');
+        btn.addEventListener('click', function() {
+            // ✅ 创建 Promise 对象，所有异步操作（AJAX）都写在构造器里
+            const p = new Promise((resolve, reject) => {
+                // 1. 创建对象
+                const xhr = new XMLHttpRequest();
+                // 2. 初始化
+                xhr.open('GET', 'https://api.apiopen.top/getJoke');
+                // 3. 发送请求
+                xhr.send();
+                // 4. 绑定事件 处理响应结果
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        // 判断响应状态码 200-299
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            // ✅ 这里能访问到 resolve，因为在 Promise 回调作用域内
+                            resolve(xhr.response);
+                        } else {
+                            // ✅ 这里能访问到 reject
+                            reject(xhr.status);
+                        }
+                    }
+                };
+            });
+
+            // 调用 then 方法处理结果
+            p.then(
+                value => {
+                    console.log('请求成功：', value);
+                },
+                reason => {
+                    console.warn('请求失败，状态码：', reason);
+                }
+            );
+        });
+    </script>
+</body>
+</html>
